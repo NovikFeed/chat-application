@@ -14,6 +14,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "chat_application"
-include(":app")
-include(":core")
-include(":data")
+include(":View")
+include(":ViewModel")
+include(":Model")
