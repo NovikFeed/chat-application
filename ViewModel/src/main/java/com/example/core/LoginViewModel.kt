@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.data.AuthRepository
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class AuthViewModel : ViewModel() {
     private val _emptyInput = MutableLiveData<Boolean>()
             val emptyInput = _emptyInput
 

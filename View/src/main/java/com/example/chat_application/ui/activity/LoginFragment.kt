@@ -33,11 +33,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chat_application.ui.activity.ui.theme.Images
-import com.example.core.LoginViewModel
+import com.example.core.AuthViewModel
 import com.example.core.NavigationManager
 import com.example.core.NavigationScreen
 @Composable
-fun LoginFragment(viewModelText: LoginViewModel) {
+fun LoginFragment(viewModelText: AuthViewModel) {
     val styleInput = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = MaterialTheme.colorScheme.onSurface,
         unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,

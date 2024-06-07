@@ -14,10 +14,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.example.chat_application.ui.activity.ui.theme.Chat_applicationTheme
-import com.example.core.LoginViewModel
-import com.example.core.NavigationViewModel
+import com.example.core.AuthViewModel
+import com.example.core.NavigationManager
 import kotlinx.coroutines.delay
 import com.example.core.NavigationScreen
+import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,24 +42,24 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyApp(modifier: Modifier = Modifier) {
-    val viewModel = NavigationViewModel()
-    val viewModelLogin = LoginViewModel()
-    MainContent(viewModel = viewModel, viewModelLogin = viewModelLogin)
+    val viewModelLogin = AuthViewModel()
+    MainContent( viewModelLogin = viewModelLogin)
 
     
 }
 @Composable
-fun MainContent(viewModel: NavigationViewModel, viewModelLogin : LoginViewModel){
-    val currentScreen by viewModel.currentScreen.observeAsState(NavigationScreen.Loading)
+fun MainContent(viewModelLogin : AuthViewModel){
+    val currentScreen by NavigationManager.currentScreen.observeAsState(NavigationScreen.Loading)
     when(currentScreen){
         NavigationScreen.Loading -> {LoadingScreen()
             LaunchedEffect(Unit) {
                 delay(2000)
-                viewModel.navigateToLater(NavigationScreen.Login)
+                NavigationManager.navigateToLater(NavigationScreen.Login)
             }
         }
-        NavigationScreen.Login -> LoginFragment(viewModel, viewModelLogin)
-        NavigationScreen.Register -> RegisterFragment()
+        NavigationScreen.Login -> LoginFragment(viewModelLogin)
+        NavigationScreen.Register -> RegisterFragment(viewModelLogin)
+        NavigationScreen.Chats -> ChatsFragment(viewModelLogin)
 
     }
 }
