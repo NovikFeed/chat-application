@@ -1,11 +1,10 @@
 package com.example.core
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.delay
 
-class NavigationViewModel : ViewModel() {
+object NavigationManager{
     // LiveData for change fragment and all navigation
     private val _currentScreen: MutableLiveData<NavigationScreen> = MutableLiveData(NavigationScreen.Loading)
     val currentScreen: LiveData<NavigationScreen> = _currentScreen

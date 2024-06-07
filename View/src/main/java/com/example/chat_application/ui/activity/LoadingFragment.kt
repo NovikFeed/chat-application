@@ -22,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chat_application.R
 import com.example.chat_application.ui.activity.ui.theme.Images
-import com.example.core.NavigationViewModel
 
 @Composable
 fun LoadingScreen(){
