@@ -67,6 +67,8 @@ dependencies {
     implementation("com.google.firebase:firebase-common-ktx:21.0.0")
     implementation ("com.google.firebase:firebase-core:9.6.1")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
+    implementation("com.google.firebase:firebase-database:21.0.0")
+    implementation("com.google.firebase:firebase-storage:21.0.0")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     runtimeOnly("com.google.dagger:hilt-android:2.49")
     runtimeOnly("androidx.compose.runtime:runtime-livedata:0.1.0-dev17")
