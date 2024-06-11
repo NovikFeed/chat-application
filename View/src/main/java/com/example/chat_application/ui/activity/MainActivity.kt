@@ -51,11 +51,12 @@ fun MyApp(modifier: Modifier = Modifier) {
 fun MainContent(viewModelLogin : AuthViewModel){
     val currentScreen by NavigationManager.currentScreen.observeAsState(NavigationScreen.Loading)
     when(currentScreen){
-        NavigationScreen.Loading -> {LoadingScreen()
-            LaunchedEffect(Unit) {
-                delay(2000)
-                NavigationManager.navigateToLater(NavigationScreen.Login)
-            }
+        NavigationScreen.Loading -> {
+            RegisterFragment(viewModelText = viewModelLogin)
+//            LaunchedEffect(Unit) {
+//                delay(2000)
+//                NavigationManager.navigateToLater(NavigationScreen.Login)
+//            }
         }
         NavigationScreen.Login -> LoginFragment(viewModelLogin)
         NavigationScreen.Register -> RegisterFragment(viewModelLogin)
