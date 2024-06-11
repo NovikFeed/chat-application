@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -33,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation("com.google.firebase:firebase-database:21.0.0")
+    implementation("com.google.firebase:firebase-storage:21.0.0")
     runtimeOnly("androidx.lifecycle:lifecycle-viewmodel:2.8.1")
     runtimeOnly("com.google.dagger:hilt-android:2.49")
 
