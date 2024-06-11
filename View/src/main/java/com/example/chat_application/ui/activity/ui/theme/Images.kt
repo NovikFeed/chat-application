@@ -9,4 +9,8 @@ object Images {
     val logo : Painter
     @Composable
     get() = painterResource(id = R.drawable.logo)
+    
+    val defaultImage : Painter
+    @Composable
+    get() = painterResource(id = R.drawable.def)
 }
