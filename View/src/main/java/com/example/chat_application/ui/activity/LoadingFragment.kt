@@ -28,11 +28,17 @@ fun LoadingScreen(){
 
      Surface(modifier = Modifier
          .fillMaxSize(), shape = RectangleShape){
-         Column(modifier = Modifier.fillMaxSize().background(Color.Cyan), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+         Column(
+             modifier = Modifier
+                 .fillMaxSize()
+                 .background(Color.Cyan),
+             verticalArrangement = Arrangement.Center,
+             horizontalAlignment = Alignment.CenterHorizontally
+         ) {
              Image(painter = Images.logo, contentDescription = "App logo")
              Text(text = "Chatty", style = MaterialTheme.typography.titleLarge)
 
 
-             }
+         }
          }
      }
