@@ -44,4 +44,19 @@ class AuthRepository {
           }
      }
 
+     suspend fun getUser() : Result<String>{
+          auth = Firebase.auth
+          return try {
+               if(auth.currentUser != null){
+                    Result.success("User logined")
+               }
+               else{
+                    Result.failure(Exception("Error"))
+               }
+          }
+          catch (e : Exception){
+               Result.failure(e)
+          }
+     }
+
 }
