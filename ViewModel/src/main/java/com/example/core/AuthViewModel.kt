@@ -20,6 +20,9 @@ class AuthViewModel : ViewModel() {
     private val _errorMassage = MutableLiveData<String>()
             val errorMassage = _errorMassage
 
+    private val _currentUser = MutableLiveData<Boolean>()
+    val currentUser = _currentUser
+
     private val email= mutableStateOf("")
     private val password = mutableStateOf("")
     private val nickname = mutableStateOf("")
@@ -89,6 +92,14 @@ class AuthViewModel : ViewModel() {
         this.uri.value = uri
         if(emptyInput.value == true){
             emptyInput.value = false
+        }
+    }
+    fun getCurrentUser(){
+        viewModelScope.launch {
+            val result = authRepository.getUser()
+            if (result.isSuccess) {
+                _currentUser.postValue(true)
+            }
         }
     }
 }

@@ -50,13 +50,23 @@ fun MyApp(modifier: Modifier = Modifier) {
 @Composable
 fun MainContent(viewModelLogin : AuthViewModel){
     val currentScreen by NavigationManager.currentScreen.observeAsState(NavigationScreen.Loading)
+    val currentUser by viewModelLogin.currentUser.observeAsState(false)
+    viewModelLogin.getCurrentUser()
     when(currentScreen){
         NavigationScreen.Loading -> {
-            RegisterFragment(viewModelText = viewModelLogin)
-//            LaunchedEffect(Unit) {
-//                delay(2000)
-//                NavigationManager.navigateToLater(NavigationScreen.Login)
-//            }
+            LoadingScreen()
+            if(currentUser){
+                LaunchedEffect(Unit){
+                    delay(2003)
+                    NavigationManager.navigateToLater(NavigationScreen.Chats)
+                }
+            }
+            else{
+                LaunchedEffect(Unit) {
+                    delay(2000)
+                NavigationManager.navigateToLater(NavigationScreen.Login)
+            }
+            }
         }
         NavigationScreen.Login -> LoginFragment(viewModelLogin)
         NavigationScreen.Register -> RegisterFragment(viewModelLogin)
