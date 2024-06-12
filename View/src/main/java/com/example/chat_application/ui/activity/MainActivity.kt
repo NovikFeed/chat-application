@@ -70,7 +70,7 @@ fun MainContent(viewModelLogin : AuthViewModel){
         }
         NavigationScreen.Login -> LoginFragment(viewModelLogin)
         NavigationScreen.Register -> RegisterFragment(viewModelLogin)
-        NavigationScreen.Chats -> ChatsFragment(viewModelLogin)
+        NavigationScreen.Chats -> ApplicationFragment(viewModelLogin)
 
     }
 }
