@@ -1,16 +1,12 @@
-package com.example.chat_application.ui.activity
+package com.example.chat_application.ui.activity.fragments
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -36,7 +31,7 @@ import com.example.core.AuthViewModel
 fun ApplicationFragment(viewModelText : AuthViewModel){
     val navController = rememberNavController()
     Scaffold(
-        bottomBar = { BottomBar(navController = navController)}
+        bottomBar = { BottomBar(navController = navController) }
     ){
         BottomNavigationGraph(navController = navController)
     }
@@ -46,7 +41,8 @@ fun BottomBar(navController: NavHostController){
     val screens = listOf(
         BottomBarScreen.Chats,
         BottomBarScreen.Friends,
-        BottomBarScreen.Request
+        BottomBarScreen.Request,
+        BottomBarScreen.AddFriend
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
