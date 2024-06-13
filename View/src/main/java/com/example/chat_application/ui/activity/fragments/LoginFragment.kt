@@ -1,4 +1,4 @@
-package com.example.chat_application.ui.activity
+package com.example.chat_application.ui.activity.fragments
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -56,17 +56,30 @@ fun LoginFragment(viewModelText: AuthViewModel) {
          verticalArrangement = Arrangement.Center){
          Image(painter = Images.logo, contentDescription = "Logo")
          Text(text = "Login to your account", style = MaterialTheme.typography.titleLarge)
-         OutlinedTextField(value = textEmail.value, onValueChange = { viewModelText.setEmail(it)
-                                                                     textEmail.value = it},
-             modifier = Modifier.fillMaxWidth().height(100.dp).padding(12.dp),
+         OutlinedTextField(value = textEmail.value,
+             onValueChange = {
+                 viewModelText.setEmail(it)
+                 textEmail.value = it},
+             modifier = Modifier
+                 .fillMaxWidth()
+                 .height(100.dp)
+                 .padding(12.dp),
              label = { Text(text = "Email", fontSize = 25.sp)},
              colors = styleInput)
-         OutlinedTextField(value = textPassword.value, onValueChange = { viewModelText.setPassword(it)
-             textPassword.value = it},
-             modifier = Modifier.fillMaxWidth().height(100.dp).padding(12.dp),
-             label = { Text(text = "Password", fontSize = 25.sp)},
+         OutlinedTextField(
+             value = textPassword.value,
+             onValueChange = {
+                 viewModelText.setPassword(it)
+                 textPassword.value = it
+             },
+             modifier = Modifier
+                 .fillMaxWidth()
+                 .height(100.dp)
+                 .padding(12.dp),
+             label = { Text(text = "Password", fontSize = 25.sp) },
              colors = styleInput,
-             visualTransformation = PasswordVisualTransformation())
+             visualTransformation = PasswordVisualTransformation()
+         )
          Surface {
              Button(modifier = Modifier
                  .fillMaxWidth(0.82f)

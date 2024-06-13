@@ -13,12 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.example.chat_application.ui.activity.fragments.ApplicationFragment
+import com.example.chat_application.ui.activity.fragments.LoadingScreen
+import com.example.chat_application.ui.activity.fragments.LoginFragment
+import com.example.chat_application.ui.activity.fragments.RegisterFragment
 import com.example.chat_application.ui.activity.ui.theme.Chat_applicationTheme
 import com.example.core.AuthViewModel
 import com.example.core.NavigationManager
 import kotlinx.coroutines.delay
 import com.example.core.NavigationScreen
-import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
