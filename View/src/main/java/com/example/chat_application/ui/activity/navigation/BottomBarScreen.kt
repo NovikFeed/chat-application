@@ -11,12 +11,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 sealed class BottomBarScreen(
     val route : String,
     val title : String,
-    val icon : ImageVector
+    val icon : ImageVector,
+    val badgedCount : Int? = null
 ) {
     object Chats : BottomBarScreen(
         route = "chats",
         title = "Chats",
-        icon = Icons.Default.MailOutline
+        icon = Icons.Default.MailOutline,
+        badgedCount = null
     )
     object Friends : BottomBarScreen(
         route = "friends",
@@ -26,7 +28,8 @@ sealed class BottomBarScreen(
     object Request : BottomBarScreen(
         route = "request",
         title = "Request",
-        icon = Icons.Default.Notifications
+        icon = Icons.Default.Notifications,
+        badgedCount  = null
     )
     object AddFriend : BottomBarScreen(
         route = "addFriend",
