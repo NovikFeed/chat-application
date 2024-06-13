@@ -1,5 +1,6 @@
 package com.example.chat_application.ui.activity.ui.theme
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -41,5 +42,14 @@ val Typography = Typography(
         fontWeight = FontWeight.Medium,
         fontSize = 20.sp,
         lineHeight = 22.sp,
-        letterSpacing = 0.5.sp)
+        letterSpacing = 0.5.sp,
+    ),
+    bodySmall =
+    TextStyle(
+        fontFamily = Nautilus,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        lineHeight = 14.sp,
+        letterSpacing = 0.5.sp
+    )
 )

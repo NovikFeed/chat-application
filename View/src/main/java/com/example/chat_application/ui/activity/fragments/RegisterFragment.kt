@@ -1,4 +1,4 @@
-package com.example.chat_application.ui.activity
+package com.example.chat_application.ui.activity.fragments
 
 import android.net.Uri
 import android.util.Log

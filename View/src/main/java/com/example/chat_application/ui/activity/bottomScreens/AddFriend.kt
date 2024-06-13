@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
@@ -31,12 +32,16 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import com.example.core.ChatsViewModel
+import com.example.data.AuthRepository
+import com.example.data.ChatsRepository
 
 @Composable
 fun AddFriendScreen(viewModel : ChatsViewModel){
     val emptyInput by viewModel.emptyInput.observeAsState(initial = false)
     val errorText by viewModel.errorText.observeAsState(initial = "fill empty fields")
+    val successful by viewModel.successful.observeAsState(initial = false)
     val styleInput = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = MaterialTheme.colorScheme.onSurface,
         unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
@@ -44,7 +49,6 @@ fun AddFriendScreen(viewModel : ChatsViewModel){
         unfocusedLabelColor = MaterialTheme.colorScheme.onSurface
     )
 
-    val textEmail = remember { mutableStateOf("") }
     Surface(contentColor = Color.Black) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -71,17 +75,18 @@ fun AddFriendScreen(viewModel : ChatsViewModel){
                     .fillMaxWidth()
                     .height(100.dp)
                     .padding(12.dp),
-                value = textEmail.value,
+                value = viewModel.fieldText.value,
                 onValueChange = {
-                    textEmail.value = it
-                    viewModel.setEmail(textEmail.value)
+                    viewModel.setEmail(it)
+                    viewModel.setEmail(viewModel.fieldText.value)
                 },
                 label = { Text(text = "Email", fontSize = 25.sp) },
                 colors = styleInput
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = {viewModel.sendRequest()},
+                onClick = {viewModel.sendRequest()
+                          viewModel.sendRequest()},
                 modifier = Modifier
                     .fillMaxWidth(0.82f)
                     .fillMaxHeight(0.12f)
@@ -96,7 +101,14 @@ fun AddFriendScreen(viewModel : ChatsViewModel){
                 )
             }
             if(emptyInput){
-
+                Text(text = errorText, color = Color.Red, modifier = Modifier
+                    .padding(16.dp, 0.dp)
+                    .wrapContentSize(Alignment.Center))
+            }
+            if(successful){
+                Text(text = "Request send is successful", modifier = Modifier
+                    .padding(16.dp, 0.dp)
+                    .wrapContentSize(Alignment.Center))
             }
         }
 
