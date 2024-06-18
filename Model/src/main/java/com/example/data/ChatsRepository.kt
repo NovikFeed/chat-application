@@ -22,13 +22,11 @@ class ChatsRepository {
 
    suspend fun sendRequest(email : String):Result<String>{
        val uid = getUserUid(email)
-       Log.i("Coord-uid", uid.toString())
        return try {
            if (uid != null) {
                val list = checkEmptyRequestList(uid)
-               Log.i("Coord-list", list.toString())
                if (list.isEmpty()) {
-                   Result.failure(Exception("you try send request for yourself or  error when receiving the list from the server"))
+                   Result.failure(Exception("you try send request for yourself or this user have your request"))
                }
                else {
                        db.child("users").child(uid).child("request").setValue(list).await()
@@ -39,7 +37,6 @@ class ChatsRepository {
            }
        }
        catch (e : Exception){
-           Log.i("Coord", e.toString())
            Result.failure(e)
        }
     }
@@ -99,26 +96,26 @@ class ChatsRepository {
             emptyList<RequestToFriend>()
         }
     }
-   suspend fun setListenerForRequestList() = callbackFlow<List<String>> {
-        val dbRef = db.child("users").child(Firebase.auth.uid.toString()).child("request")
-        val listener = object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()){
-                    val list = snapshot.getValue<List<String>>()
-                    trySend(list!!)
-                }
-                else{
-                    trySend(emptyList()).isSuccess
-                }
-            }
+   suspend fun setListenerForRequestList() = callbackFlow<List<RequestToFriend>> {
+           val dbRef = db.child("users").child(Firebase.auth.uid.toString()).child("request")
+           val listener = object : ValueEventListener {
+               override fun onDataChange(snapshot: DataSnapshot) {
+                   if (snapshot.exists()) {
+                       val list = snapshot.getValue<List<RequestToFriend>>()
+                       val resList = list!!.filter { it.status }
+                       trySend(resList)
+                   } else {
+                       trySend(emptyList()).isSuccess
+                   }
+               }
 
-            override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
-            }
-        }
-        dbRef.addValueEventListener(listener)
-        awaitClose{dbRef.removeEventListener(listener)}
-    }
+               override fun onCancelled(error: DatabaseError) {
+                   close(error.toException())
+               }
+           }
+           dbRef.addValueEventListener(listener)
+           awaitClose { dbRef.removeEventListener(listener) }
+   }
 
     private suspend fun getUser(uid : String): User?{
        val snapshot =  db.child("users").child(uid).get().await()
