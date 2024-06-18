@@ -12,7 +12,7 @@ sealed class BottomBarScreen(
     val route : String,
     val title : String,
     val icon : ImageVector,
-    val badgedCount : Int? = null
+    var badgedCount : Int? = null
 ) {
     object Chats : BottomBarScreen(
         route = "chats",

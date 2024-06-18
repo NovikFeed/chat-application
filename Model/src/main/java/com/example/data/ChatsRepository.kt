@@ -10,6 +10,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlin.Exception
 
@@ -18,17 +22,13 @@ class ChatsRepository {
 
    suspend fun sendRequest(email : String):Result<String>{
        val uid = getUserUid(email)
+       Log.i("Coord-uid", uid.toString())
        return try {
            if (uid != null) {
                val list = checkEmptyRequestList(uid)
+               Log.i("Coord-list", list.toString())
                if (list.isEmpty()) {
                    Result.failure(Exception("you try send request for yourself or  error when receiving the list from the server"))
-               }
-               else if(list.contains("you are sending a request to yourself")){
-                   Result.failure(Exception("you are sending a request to yourself"))
-               }
-               else if(list.contains("you are sending a request to yourself or this people have your request")){
-                   Result.failure(Exception("you are sending a request to yourself or this people have your request"))
                }
                else {
                        db.child("users").child(uid).child("request").setValue(list).await()
@@ -39,6 +39,7 @@ class ChatsRepository {
            }
        }
        catch (e : Exception){
+           Log.i("Coord", e.toString())
            Result.failure(e)
        }
     }
@@ -55,44 +56,73 @@ class ChatsRepository {
             }
         }
         catch (e : Exception){
-            Log.e("DB error", e.toString())
+            Log.e("Error", e.toString())
             null
         }
     }
-    private suspend fun checkEmptyRequestList(uid: String) : List<String>{
+    private suspend fun checkEmptyRequestList(uid: String) : List<RequestToFriend>{
         val requestRef = db.child("users").child(uid).child("request")
+        val myUid = Firebase.auth.uid.toString()
+        val user = getUser(myUid)
+        val request = RequestToFriend(myUid, user!!.nickname,user!!.imgUrl)
         return try {
             val snapshot = requestRef.get().await()
             if(snapshot.exists()){
-                val list = snapshot.getValue<List<String>>()
+                val list = snapshot.getValue<List<RequestToFriend>>()
                 if(list == null){
-                    if(uid != Firebase.auth.uid){
-                        listOf(uid)
+                    if(uid != myUid){
+                        listOf(request)
                     }
                     else{
-                        listOf("you are sending a request to yourself")
+                        emptyList<RequestToFriend>()
                     }
                 }
                 else{
-                    if(!list.contains(uid) && uid != Firebase.auth.uid){
-                        list + uid
+                    if(!list.contains(request) && uid != myUid){
+                        list + request
                     }
                     else{
-                        listOf("you are sending a request to yourself or this people have your request")
+                        emptyList<RequestToFriend>()
                     }
                 }
             }
             else{
-                if(uid != Firebase.auth.uid){
-                    listOf(uid)
+                if(uid != myUid){
+                    listOf(request)
                 }
                 else{
-                    listOf("you are sending a request to yourself")
+                    emptyList<RequestToFriend>()
                 }
             }
         }
         catch (e : Exception){
-            emptyList<String>()
+            emptyList<RequestToFriend>()
         }
+    }
+   suspend fun setListenerForRequestList() = callbackFlow<List<String>> {
+        val dbRef = db.child("users").child(Firebase.auth.uid.toString()).child("request")
+        val listener = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    val list = snapshot.getValue<List<String>>()
+                    trySend(list!!)
+                }
+                else{
+                    trySend(emptyList()).isSuccess
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+        dbRef.addValueEventListener(listener)
+        awaitClose{dbRef.removeEventListener(listener)}
+    }
+
+    private suspend fun getUser(uid : String): User?{
+       val snapshot =  db.child("users").child(uid).get().await()
+        Log.i("coord", snapshot.getValue<User>().toString())
+        return snapshot.getValue<User>()
     }
 }
