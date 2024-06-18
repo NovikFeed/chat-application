@@ -5,8 +5,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.Badge
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -16,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -58,6 +62,7 @@ fun BottomBar(navController: NavHostController){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RowScope.AddItem(
     screen : BottomBarScreen,
@@ -76,11 +81,18 @@ fun RowScope.AddItem(
             )
         },
         icon = {
+            BadgedBox(badge = {
+                if(screen.badgedCount != null && screen.badgedCount != 0){
+                    Badge {
+                        Text(text = screen.badgedCount.toString(), fontSize = 12.sp)
+                    }
+                }
+            }) {
             Image(
                 imageVector = screen.icon,
                 contentDescription = "NavIcon",
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-            )
+            )}
         },
         selected = currentDestination?.hierarchy?.any {
             it.route == screen.route
