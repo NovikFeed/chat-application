@@ -19,6 +19,7 @@ import kotlin.Exception
 
 class ChatsRepository {
     private val db = Firebase.database("https://chat-ab91b-default-rtdb.firebaseio.com/").reference
+    private val currentUid = Firebase.auth.uid!!
 
    suspend fun sendRequest(email : String):Result<String>{
        val uid = getUserUid(email)
@@ -60,7 +61,7 @@ class ChatsRepository {
     }
     private suspend fun checkEmptyRequestList(uid: String) : List<RequestToFriend>{
         val requestRef = db.child("users").child(uid).child("request")
-        val myUid = Firebase.auth.uid.toString()
+        val myUid = currentUid.toString()
         val user = getUser(myUid)
         val request = RequestToFriend(myUid, user!!.nickname,user!!.imgUrl)
         return try {
@@ -98,7 +99,7 @@ class ChatsRepository {
         }
     }
    suspend fun setListenerForRequestList() = callbackFlow<List<RequestToFriend>> {
-           val dbRef = db.child("users").child(Firebase.auth.uid.toString()).child("request")
+           val dbRef = db.child("users").child(currentUid).child("request")
            val listener = object : ValueEventListener {
                override fun onDataChange(snapshot: DataSnapshot) {
                    if (snapshot.exists()) {
@@ -124,7 +125,7 @@ class ChatsRepository {
     }
 
     suspend fun refuseRequest(refuseUid : String){
-        val reference = db.child("users").child(Firebase.auth.uid!!).child("request")
+        val reference = db.child("users").child(currentUid).child("request")
         val snapshot = reference.get().await()
         if(snapshot.exists()){
             snapshot.children.forEach { request ->
@@ -138,5 +139,39 @@ class ChatsRepository {
         }
 
     }
+    suspend fun acceptRequest(acceptUid: String) : Result<String>{
+        val acceptedUser = getUser(acceptUid)!!
+        val reference = db.child("users").child(Firebase.auth.uid!!).child("friends")
+        val snapshot = reference.get().await()
+        return try {
+            if (snapshot.exists()) {
+                var list = snapshot.getValue<List<Friend>>()
+                if (list != null) {
+                    list = list + Friend(currentUid, acceptedUser.imgUrl, acceptedUser.nickname)
+                    reference.setValue(list).await()
+                    Result.success("Ok")
+                } else {
+                    val list = listOf<Friend>(
+                        Friend(
+                            currentUid,
+                            acceptedUser.imgUrl,
+                            acceptedUser.nickname
+                        )
+                    )
+                    reference.setValue(list).await()
+                    Result.success("Ok")
+                }
+            } else {
+                val list =
+                    listOf<Friend>(Friend(currentUid, acceptedUser.imgUrl, acceptedUser.nickname))
+                reference.setValue(list).await()
+                Result.success("Ok")
 
+            }
+        }
+        catch (e : Exception){
+            Log.e("Accepted Error", e.toString())
+            Result.failure(e)
+        }
+    }
 }

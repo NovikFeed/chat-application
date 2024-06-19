@@ -38,6 +38,11 @@ class RequestViewModel : ViewModel() {
         }
     }
     fun toAccept(uid:String){
-
+        viewModelScope.launch {
+            val result = repository.acceptRequest(uid)
+            if(result.isSuccess){
+                toRefuse(uid)
+            }
+        }
     }
 }
