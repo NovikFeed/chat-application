@@ -57,7 +57,7 @@ fun RequestScreen(viewModel : RequestViewModel){
                 Text(text = "You have ${list.size} requests:")}
             LazyColumn {
                 items(list){item ->
-                    addItem(item = item)
+                    addItem(item = item, viewModel)
                 }
             }
         }
@@ -70,7 +70,7 @@ fun RequestScreen(viewModel : RequestViewModel){
 
 }
 @Composable
-fun addItem(item : RequestToFriend){
+fun addItem(item : RequestToFriend, viewModel: RequestViewModel){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -119,7 +119,7 @@ fun addItem(item : RequestToFriend){
                             )
                         }
                         Button(
-                            onClick = { },
+                            onClick = {viewModel.toRefuse(item.uid)},
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
