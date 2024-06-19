@@ -202,4 +202,17 @@ class ChatsRepository {
             Result.failure(e)
         }
     }
+    suspend fun addMeToFriend(acceptedUid : String){
+        val currentUser = getUser(currentUid)!!
+        val newFriend = getUser(acceptedUid)!!
+        val listFriendsMyFriend = newFriend.friends
+        var sendList = emptyList<Friend>()
+        if(listFriendsMyFriend.isNotEmpty()){
+            sendList = listFriendsMyFriend + Friend(currentUid,currentUser.imgUrl,currentUser.nickname)
+        }
+        else{
+            sendList = listOf(Friend(currentUid,currentUser.imgUrl,currentUser.nickname))
+        }
+        db.child("users").child(acceptedUid).child("friends").setValue(sendList).await()
+    }
 }
