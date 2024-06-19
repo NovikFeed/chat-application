@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.ChatsRepository
+import com.example.data.Friend
 import com.example.data.RequestToFriend
 import com.example.data.User
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -29,7 +30,7 @@ class RequestViewModel : ViewModel() {
             }
         }
         catch (e : Exception){
-            Log.e("coord", e.toString())
+            Log.e("Error request listener", e.toString())
         }
     }
     fun toRefuse(uid : String){
@@ -37,11 +38,12 @@ class RequestViewModel : ViewModel() {
             repository.refuseRequest(uid)
         }
     }
-    fun toAccept(uid:String){
+    fun toAccept(acceptedUserUid:String){
         viewModelScope.launch {
-            val result = repository.acceptRequest(uid)
+            val result = repository.acceptRequest(acceptedUserUid)
             if(result.isSuccess){
-                toRefuse(uid)
+                toRefuse(acceptedUserUid)
+                repository.addMeToFriend(acceptedUserUid)
             }
         }
     }
