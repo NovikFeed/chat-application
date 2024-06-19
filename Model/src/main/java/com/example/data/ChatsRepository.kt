@@ -37,6 +37,7 @@ class ChatsRepository {
            }
        }
        catch (e : Exception){
+           Log.i("coord", e.toString())
            Result.failure(e)
        }
     }
@@ -119,7 +120,23 @@ class ChatsRepository {
 
     private suspend fun getUser(uid : String): User?{
        val snapshot =  db.child("users").child(uid).get().await()
-        Log.i("coord", snapshot.getValue<User>().toString())
         return snapshot.getValue<User>()
     }
+
+    suspend fun refuseRequest(refuseUid : String){
+        val reference = db.child("users").child(Firebase.auth.uid!!).child("request")
+        val snapshot = reference.get().await()
+        if(snapshot.exists()){
+            snapshot.children.forEach { request ->
+                val res = request.getValue<RequestToFriend>()
+                if(res != null && res.uid == refuseUid){
+                    res.status = false
+                    request.ref.setValue(res).await()
+                    return@forEach
+                }
+            }
+        }
+
+    }
+
 }
