@@ -104,7 +104,7 @@ fun addItem(item : RequestToFriend, viewModel: RequestViewModel){
                     Text(text = item.nickname, textAlign = TextAlign.Center)
                     Row(horizontalArrangement = Arrangement.Center) {
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { viewModel.toAccept(item.uid) },
                             modifier = Modifier.border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.onSurface,
