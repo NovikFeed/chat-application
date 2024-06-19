@@ -59,6 +59,7 @@ class ChatsRepository {
             null
         }
     }
+    
     private suspend fun checkEmptyRequestList(uid: String) : List<RequestToFriend>{
         val requestRef = db.child("users").child(uid).child("request")
         val myUid = currentUid.toString()
@@ -147,13 +148,13 @@ class ChatsRepository {
             if (snapshot.exists()) {
                 var list = snapshot.getValue<List<Friend>>()
                 if (list != null) {
-                    list = list + Friend(currentUid, acceptedUser.imgUrl, acceptedUser.nickname)
+                    list = list + Friend(acceptUid, acceptedUser.imgUrl, acceptedUser.nickname)
                     reference.setValue(list).await()
                     Result.success("Ok")
                 } else {
                     val list = listOf<Friend>(
                         Friend(
-                            currentUid,
+                            acceptUid,
                             acceptedUser.imgUrl,
                             acceptedUser.nickname
                         )
@@ -163,7 +164,7 @@ class ChatsRepository {
                 }
             } else {
                 val list =
-                    listOf<Friend>(Friend(currentUid, acceptedUser.imgUrl, acceptedUser.nickname))
+                    listOf<Friend>(Friend(acceptUid, acceptedUser.imgUrl, acceptedUser.nickname))
                 reference.setValue(list).await()
                 Result.success("Ok")
 
