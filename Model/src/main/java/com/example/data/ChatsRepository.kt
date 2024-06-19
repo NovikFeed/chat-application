@@ -25,13 +25,18 @@ class ChatsRepository {
        val uid = getUserUid(email)
        return try {
            if (uid != null) {
+               val notInFriends = checkInFriends(uid)
                val list = checkEmptyRequestList(uid)
                if (list.isEmpty()) {
                    Result.failure(Exception("you try send request for yourself or this user have your request"))
                }
                else {
+                    if(notInFriends){
                        db.child("users").child(uid).child("request").setValue(list).await()
-                       Result.success("Successful send")
+                       Result.success("Successful send")}
+                   else{
+                       Result.failure(Exception("this user is already among your friends"))
+                   }
                }
            } else {
                Result.failure(Exception("user with such email does not exist"))
@@ -59,7 +64,29 @@ class ChatsRepository {
             null
         }
     }
-    
+     private suspend fun checkInFriends(uid : String) : Boolean{
+         try {
+             val currentUser = getUser(currentUid)!!
+             val listFriends = currentUser.friends
+             if(listFriends.isNotEmpty()){
+             listFriends.forEach { friend ->
+                 if (friend.uid == uid) {
+                     return false
+                     return@forEach
+                 } else {
+                     return true
+                 }
+             }
+             }
+             else{
+                 return true
+             }
+         }
+         catch (e : Exception){
+             Log.i("Error check", e.toString())
+         }
+         return false
+    }
     private suspend fun checkEmptyRequestList(uid: String) : List<RequestToFriend>{
         val requestRef = db.child("users").child(uid).child("request")
         val myUid = currentUid.toString()
