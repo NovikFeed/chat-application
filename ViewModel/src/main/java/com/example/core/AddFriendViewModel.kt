@@ -8,7 +8,7 @@ import com.example.data.ChatsRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ChatsViewModel : ViewModel() {
+class AddFriendViewModel : ViewModel() {
     private val _emptyInput = MutableLiveData<Boolean>()
     val emptyInput = _emptyInput
 

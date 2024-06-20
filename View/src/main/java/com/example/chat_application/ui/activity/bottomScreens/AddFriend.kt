@@ -23,8 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,13 +30,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
-import com.example.core.ChatsViewModel
-import com.example.data.AuthRepository
-import com.example.data.ChatsRepository
+import com.example.core.AddFriendViewModel
 
 @Composable
-fun AddFriendScreen(viewModel : ChatsViewModel){
+fun AddFriendScreen(viewModel : AddFriendViewModel){
     val emptyInput by viewModel.emptyInput.observeAsState(initial = false)
     val errorText by viewModel.errorText.observeAsState(initial = "fill empty fields")
     val successful by viewModel.successful.observeAsState(initial = false)

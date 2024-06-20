@@ -8,13 +8,13 @@ import com.example.chat_application.ui.activity.bottomScreens.AddFriendScreen
 import com.example.chat_application.ui.activity.bottomScreens.ChatsScreen
 import com.example.chat_application.ui.activity.bottomScreens.FriendsScreen
 import com.example.chat_application.ui.activity.bottomScreens.RequestScreen
-import com.example.core.ChatsViewModel
+import com.example.core.AddFriendViewModel
 import com.example.core.FriendViewModel
 import com.example.core.RequestViewModel
 
 @Composable
 fun BottomNavigationGraph(navController: NavHostController){
-     val viewModel = ChatsViewModel()
+     val viewModel = AddFriendViewModel()
     val viewModelRequest = RequestViewModel()
     val viewModelFriend = FriendViewModel()
     NavHost(
