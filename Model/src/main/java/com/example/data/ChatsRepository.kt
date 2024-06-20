@@ -256,8 +256,8 @@ class ChatsRepository {
     }
 
     suspend fun setChatForUsers(chatUid : String, chat : Chat, firstUserUid: String, secondUserUid : String){
-        db.child("users").child(firstUserUid).child("chats").child(chatUid).setValue(SmallChat(chat.secondPhotoUrl,Message(), chat.secondNickname)).await()
-        db.child("users").child(secondUserUid).child("chats").child(chatUid).setValue(SmallChat(chat.firstPhotoUrl,Message(), chat.firstNickname)).await()
+        db.child("users").child(firstUserUid).child("chats").child(chatUid).setValue(SmallChat(chatUid,chat.secondPhotoUrl,Message(), chat.secondNickname)).await()
+        db.child("users").child(secondUserUid).child("chats").child(chatUid).setValue(SmallChat(chatUid,chat.firstPhotoUrl,Message(), chat.firstNickname)).await()
         db.child("users").child(firstUserUid).child("friends").child(secondUserUid).child("chatUid").setValue(chatUid).await()
         db.child("users").child(secondUserUid).child("friends").child(firstUserUid).child("chatUid").setValue(chatUid).await()
     }
