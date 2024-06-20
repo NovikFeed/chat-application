@@ -146,6 +146,25 @@ class ChatsRepository {
            dbRef.addValueEventListener(listener)
            awaitClose { dbRef.removeEventListener(listener) }
    }
+    suspend fun setListenerForFriendsList() = callbackFlow<List<Friend>> {
+        val dbRef = db.child("users").child(currentUid).child("friends")
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val list = snapshot.getValue<List<Friend>>()
+                    trySend(list!!)
+                } else {
+                    trySend(emptyList()).isSuccess
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+        dbRef.addValueEventListener(listener)
+        awaitClose { dbRef.removeEventListener(listener) }
+    }
 
     private suspend fun getUser(uid : String): User?{
        val snapshot =  db.child("users").child(uid).get().await()

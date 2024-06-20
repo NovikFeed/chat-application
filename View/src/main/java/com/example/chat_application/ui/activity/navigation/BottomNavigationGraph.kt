@@ -9,12 +9,14 @@ import com.example.chat_application.ui.activity.bottomScreens.ChatsScreen
 import com.example.chat_application.ui.activity.bottomScreens.FriendsScreen
 import com.example.chat_application.ui.activity.bottomScreens.RequestScreen
 import com.example.core.ChatsViewModel
+import com.example.core.FriendViewModel
 import com.example.core.RequestViewModel
 
 @Composable
 fun BottomNavigationGraph(navController: NavHostController){
      val viewModel = ChatsViewModel()
     val viewModelRequest = RequestViewModel()
+    val viewModelFriend = FriendViewModel()
     NavHost(
         navController = navController,
         startDestination = BottomBarScreen.Chats.route){
@@ -22,7 +24,7 @@ fun BottomNavigationGraph(navController: NavHostController){
             ChatsScreen()
         }
         composable(BottomBarScreen.Friends.route){
-            FriendsScreen()
+            FriendsScreen(viewModelFriend)
         }
         composable(BottomBarScreen.Request.route){
             RequestScreen(viewModel = viewModelRequest)
