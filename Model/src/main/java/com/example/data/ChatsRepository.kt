@@ -163,6 +163,34 @@ class ChatsRepository {
         awaitClose { dbRef.removeEventListener(listener) }
     }
 
+    suspend fun setListenerForChatsList() = callbackFlow<List<SmallChat>> {
+        val dbRef = db.child("users").child(currentUid!!).child("chats")
+        val listResult = mutableListOf<SmallChat>()
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                listResult.clear()
+                if (snapshot.exists()) {
+                    for (friendSnapshot in snapshot.children){
+                        val chat = friendSnapshot.getValue<SmallChat>()
+                        chat?.let{
+                            listResult.add(chat)
+                        }
+                    }
+                    trySend(listResult)
+                } else {
+                    trySend(listResult).isSuccess
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+
+        dbRef.addValueEventListener(listener)
+        awaitClose { dbRef.removeEventListener(listener) }
+    }
+
      suspend fun getUser(uid : String): User?{
        val snapshot =  db.child("users").child(uid).get().await()
         return snapshot.getValue<User>()
@@ -228,9 +256,10 @@ class ChatsRepository {
     }
 
     suspend fun setChatForUsers(chatUid : String, chat : Chat, firstUserUid: String, secondUserUid : String){
-        db.child("users").child(firstUserUid).child("chats").child(chatUid).setValue(SmallChat(chat.secondPhotoUrl,Message(), chat.secondNickname))
-        db.child("users").child(secondUserUid).child("chats").child(chatUid).setValue(SmallChat(chat.firstPhotoUrl,Message(), chat.firstNickname))
-
+        db.child("users").child(firstUserUid).child("chats").child(chatUid).setValue(SmallChat(chat.secondPhotoUrl,Message(), chat.secondNickname)).await()
+        db.child("users").child(secondUserUid).child("chats").child(chatUid).setValue(SmallChat(chat.firstPhotoUrl,Message(), chat.firstNickname)).await()
+        db.child("users").child(firstUserUid).child("friends").child(secondUserUid).child("chatUid").setValue(chatUid).await()
+        db.child("users").child(secondUserUid).child("friends").child(firstUserUid).child("chatUid").setValue(chatUid).await()
     }
 
 }
