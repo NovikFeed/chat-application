@@ -120,7 +120,7 @@ fun addFriendToScreen(item: Friend, viewModel: FriendViewModel) {
                 textAlign = TextAlign.Center)
 
                 Button(
-                    onClick = { },
+                    onClick = { viewModel.startChat(item.chatUid,item.uid)},
                     modifier = Modifier.border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.onSurface,

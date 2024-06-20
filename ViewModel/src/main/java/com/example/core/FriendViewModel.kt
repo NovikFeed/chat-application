@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.ChatUidRepository
 import com.example.data.ChatsRepository
 import com.example.data.Friend
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,5 +50,11 @@ class FriendViewModel : ViewModel() {
     }
     fun setSearchText(text : String){
         _searchText.value = text
+    }
+
+    fun startChat(chatUid : String, userToUid : String){
+        ChatUidRepository.setSelectedChat(chatUid, repository.getCurrentUid(), userToUid)
+        NavigationManager.navigateTo(NavigationScreen.ChatWithFriend)
+
     }
 }

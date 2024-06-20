@@ -42,8 +42,8 @@ class RequestViewModel : ViewModel() {
         viewModelScope.launch {
             val result = repository.acceptRequest(acceptedUserUid)
             if(result.isSuccess){
-                toRefuse(acceptedUserUid)
                 repository.addMeToFriend(acceptedUserUid)
+                toRefuse(acceptedUserUid)
             }
         }
     }
