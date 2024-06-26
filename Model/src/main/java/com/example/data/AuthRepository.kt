@@ -63,4 +63,9 @@ class AuthRepository {
           Firebase.auth.signOut()
      }
 
+     suspend fun setOnlineStatus(status : String){
+         val db =  Firebase.database("https://chat-ab91b-default-rtdb.firebaseio.com/").reference
+          db.child("users").child(Firebase.auth.uid!!).child("onlineStatus").setValue(status).await()
+     }
+
 }

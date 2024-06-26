@@ -5,6 +5,7 @@ data class User(
     val nickname: String = "",
     val email: String = "",
     val imgUrl: String = "",
+    val onlineStatus : String = "offline",
     val chats: HashMap<String,Chat> = HashMap(),
     val friends: HashMap<String,Friend> = HashMap(),
     val request: List<RequestToFriend> = listOf()

@@ -6,9 +6,12 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewModelScope
 import com.example.data.AuthRepository
 import kotlinx.coroutines.launch
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class AuthViewModel : ViewModel() {
     private val _emptyInput = MutableLiveData<Boolean>()
@@ -22,6 +25,9 @@ class AuthViewModel : ViewModel() {
 
     private val _currentUser = MutableLiveData<Boolean>()
     val currentUser = _currentUser
+
+    private val _onlineStatus = MutableLiveData<String>()
+    val onlineStatus = _onlineStatus
 
     private val email= mutableStateOf("")
     private val password = mutableStateOf("")
@@ -101,5 +107,20 @@ class AuthViewModel : ViewModel() {
                 _currentUser.postValue(true)
             }
         }
+    }
+    fun setOnlineStatus(){
+        viewModelScope.launch {
+            AuthRepository().setOnlineStatus("online")
+        }
+    }
+    fun setOfflineStatus(){
+        viewModelScope.launch {
+            AuthRepository().setOnlineStatus("last online: ${setTime()}")
+        }
+    }
+    private fun setTime() : String{
+        val time = LocalTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        return time.format(formatter)
     }
 }

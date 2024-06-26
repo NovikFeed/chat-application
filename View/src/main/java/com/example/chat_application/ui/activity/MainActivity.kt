@@ -13,6 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.example.chat_application.ui.activity.fragments.ApplicationFragment
 import com.example.chat_application.ui.activity.fragments.ChatWithFriends
 import com.example.chat_application.ui.activity.fragments.LoadingScreen
@@ -63,6 +66,20 @@ fun MainContent(viewModelLogin : AuthViewModel){
         NavigationScreen.Loading -> {
             LoadingScreen()
             if(currentUser){
+                val lifecycleOwner = LocalLifecycleOwner.current
+                LaunchedEffect(lifecycleOwner){
+                    val observer = LifecycleEventObserver{_, event ->
+                        when(event){
+                            Lifecycle.Event.ON_START -> {
+                                viewModelLogin.setOnlineStatus()
+                            }
+                            Lifecycle.Event.ON_STOP -> {
+                                viewModelLogin.setOfflineStatus()}
+                            else ->{}
+                        }
+                    }
+                    lifecycleOwner.lifecycle.addObserver(observer)
+                }
                 LaunchedEffect(Unit){
                     delay(2003)
                     NavigationManager.navigateToLater(NavigationScreen.Chats)
