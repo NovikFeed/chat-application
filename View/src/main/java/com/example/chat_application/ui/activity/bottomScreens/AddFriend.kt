@@ -80,8 +80,9 @@ fun AddFriendScreen(viewModel : AddFriendViewModel){
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = {viewModel.sendRequest()
-                          viewModel.sendRequest()},
+                onClick = {
+                    viewModel.sendRequest()
+                          },
                 modifier = Modifier
                     .fillMaxWidth(0.82f)
                     .fillMaxHeight(0.12f)

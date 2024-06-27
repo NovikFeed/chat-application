@@ -24,7 +24,7 @@ object ChatUidRepository {
                 val firstUser = repository.getUser(firstUserUid)!!
                 val secondUser = repository.getUser(secondUserUid)!!
                 val chatUid = firstUserUid + secondUserUid
-                val chat = Chat(firstUser.imgUrl, secondUser.imgUrl, firstUser.nickname, secondUser.nickname)
+                val chat = Chat(firstUserUid, secondUserUid,firstUser.imgUrl, secondUser.imgUrl, firstUser.nickname, secondUser.nickname)
                 repository.setChat(chat,chatUid)
                 repository.setChatForUsers(chatUid, chat, firstUserUid, secondUserUid)
                 _selectedChat.value = chat

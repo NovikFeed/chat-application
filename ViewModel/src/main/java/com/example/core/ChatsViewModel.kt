@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.Chat
+import com.example.data.ChatUidRepository
 import com.example.data.ChatsRepository
 import com.example.data.Friend
 import com.example.data.SmallChat
@@ -34,5 +35,7 @@ class ChatsViewModel : ViewModel() {
 
         }
     }
-
+    fun startChat(chatUid : String){
+    ChatUidRepository.setSelectedChat(chatUid, repository.getCurrentUid(), "")
+    NavigationManager.navigateTo(NavigationScreen.ChatWithFriend)}
 }

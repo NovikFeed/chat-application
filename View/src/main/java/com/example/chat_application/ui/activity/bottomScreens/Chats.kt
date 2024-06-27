@@ -77,7 +77,7 @@ fun ChatsScreen(viewModel: ChatsViewModel){
 @Composable
 fun addFriendToScreen(item: SmallChat, viewModel: ChatsViewModel) {
     Button(
-        onClick = {},
+        onClick = {viewModel.startChat(item.uid)},
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)

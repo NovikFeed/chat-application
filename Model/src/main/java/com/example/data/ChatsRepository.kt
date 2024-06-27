@@ -261,5 +261,33 @@ class ChatsRepository {
         db.child("users").child(firstUserUid).child("friends").child(secondUserUid).child("chatUid").setValue(chatUid).await()
         db.child("users").child(secondUserUid).child("friends").child(firstUserUid).child("chatUid").setValue(chatUid).await()
     }
+    fun checkUid(firstUserUid: String, secondUserUid: String) : String{
+        return if(Firebase.auth.uid!! == firstUserUid){
+            secondUserUid
+        } else{
+            firstUserUid
+        }
+    }
+    suspend fun setListenerForOnlineStatus(uid : String) = callbackFlow<String>{
+        val ref = db.child("users").child(uid).child("onlineStatus")
+        val listener = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    val status = snapshot.getValue<String>()
+                    status?.let {
+                        trySend(status)
+                    }
+                }
+                else{
+                    trySend("")
+                }
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        }
+        ref.addValueEventListener(listener)
+        awaitClose{ref.removeEventListener(listener)}
+    }
 }
