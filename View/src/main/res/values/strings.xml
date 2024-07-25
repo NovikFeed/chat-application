@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">chat_application</string>
+    <string name="app_name">Chatty</string>
     <string name="title_activity_start">StartActivity</string>
     <string name="title_activity_main">MainActivity</string>
 </resources>
