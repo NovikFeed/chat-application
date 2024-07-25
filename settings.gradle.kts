@@ -2,6 +2,7 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {
@@ -13,6 +14,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "chat_application"
-include(":View")
-include(":ViewModel")
-include(":Model")
+include(":app")
+include(":core")
+include(":data")
